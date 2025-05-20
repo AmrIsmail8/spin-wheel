@@ -3,156 +3,187 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Spin & Win!</title>
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <title>Spin & Win! · Tal2ema</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    /* Page setup */
+    :root {
+      --primary: #2C5F2D;
+      --secondary: #A4C639;
+      --light: #FFFFFF;
+      --dark: #333333;
+      --glass-bg: rgba(255,255,255,0.15);
+    }
+    *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #667eea, #764ba2);
       font-family: 'Poppins', sans-serif;
-      color: #fff;
+      background: linear-gradient(135deg, var(--secondary), var(--primary));
+      color: var(--light);
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-    .container {
-      text-align: center;
+    header {
+      width: 100%; padding: 1rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(8px);
+      position: fixed; top: 0; z-index: 100;
+    }
+    .logo-text {
+      font-family: 'Lora', serif;
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+    nav a {
+      margin: 0 1rem;
+      color: var(--dark);
+      font-weight: 500;
       position: relative;
     }
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    }
-    /* Wheel container */
-    #wheel-container {
-      width: 300px;
-      height: 300px;
-      margin: 0 auto;
-      position: relative;
-      border: 8px solid #fff;
-      border-radius: 50%;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-      overflow: hidden;
-      transition: transform 5s cubic-bezier(0.33,1,0.68,1);
-    }
-    /* Canvas fills container */
-    #wheelCanvas {
-      width: 100%;
-      height: 100%;
-    }
-    /* Pointer arrow */
-    #pointer {
-      width: 0;
-      height: 0;
-      border-left: 15px solid transparent;
-      border-right: 15px solid transparent;
-      border-bottom: 30px solid #fff;
+    nav a::after {
+      content: '';
       position: absolute;
-      top: -30px;
-      left: calc(50% - 15px);
-      z-index: 5;
+      bottom: -4px; left: 0;
+      width: 0; height: 2px;
+      background: var(--primary);
+      transition: width .3s;
     }
-    /* Spin button */
-    #spinBtn {
-      margin-top: 2rem;
+    nav a:hover::after { width: 100%; }
+    .hero {
+      margin-top: 80px;
+      padding: 4rem 1rem 6rem; /* extra bottom padding */
+      text-align: center;
+    }
+    .hero h1 {
+      font-family: 'Lora', serif;
+      font-size: 3rem;
+      color: var(--light);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+      margin-bottom: 1rem;
+    }
+    .hero p {
       font-size: 1.2rem;
-      padding: 0.8rem 2rem;
-      background: #fff;
-      color: #764ba2;
+      color: var(--light);
+      margin-bottom: 2rem;
+    }
+    .hero button {
+      position: relative;
+      z-index: 20;
+      padding: .75rem 2rem;
+      font-size: 1.25rem;
+      background: var(--light);
+      color: var(--primary);
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform .2s;
+      margin-bottom: 3rem;
     }
-    #spinBtn:disabled {
-      opacity: 0.6;
-      cursor: default;
+    .hero button:active { transform: scale(.96); }
+    .container {
+      margin: -60px auto 2rem; /* less overlap to reveal hero button */
+      width: 90%; max-width: 360px;
+      background: var(--glass-bg);
+      border-radius: 20px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      padding: 2rem 1rem;
+      text-align: center;
+      position: relative;
+      z-index: 10;
     }
-    #spinBtn:active {
-      transform: scale(0.98);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    #wheel-container {
+      width: 100%; padding-bottom: 100%;
+      position: relative;
+      border-radius: 50%; overflow: hidden;
+      border: 6px solid var(--light);
+      margin-bottom: 1.5rem;
+      z-index: 1;
     }
+    #wheelCanvas {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    #pointer {
+      width: 0; height: 0;
+      border-left: 24px solid transparent;
+      border-right: 24px solid transparent;
+      border-bottom: 36px solid var(--light);
+      position: absolute;
+      top: -36px; left: calc(50% - 24px);
+      z-index: 20;
+    }
+    footer { height: 2rem; }
   </style>
 </head>
 <body>
+  <header>
+    <div class="logo-text">Tal2ema</div>
+    <nav>
+      <a href="#">Home</a><a href="#">Products</a><a href="#">About Us</a><a href="#">Contact</a>
+    </nav>
+  </header>
+  <section class="hero">
+    <h1>Spin & Win!</h1>
+    <p>Get a chance to win exclusive tea delights!</p>
+    <button id="triggerSpin">Try Your Luck</button>
+  </section>
   <div class="container">
-    <h1>🎉 Spin & Win!</h1>
     <div id="pointer"></div>
-    <div id="wheel-container">
-      <canvas id="wheelCanvas" width="300" height="300"></canvas>
-    </div>
-    <button id="spinBtn">SPIN</button>
+    <div id="wheel-container"><canvas id="wheelCanvas" width="300" height="300"></canvas></div>
   </div>
-
-  <!-- SweetAlert2 for styled popups -->
+  <footer></footer>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const options = ['Option 1','Option 2','Option 3','Option 4','Option 5','Option 6'];
+      const options = ['Free Tea Sample', '20% Off', 'Free Shipping', 'Tea Tote Bag', 'Buy 2 Get 1'];
       const canvas = document.getElementById('wheelCanvas');
       const ctx = canvas.getContext('2d');
-      const segmentCount = options.length;
-      const segmentAngle = (2 * Math.PI) / segmentCount;
-      const colors = options.map((_, i) => `hsl(${i * (360/segmentCount)}, 70%, 60%)`);
+      const count = options.length;
+      const angle = (2 * Math.PI) / count;
+      const colors = options.map((_, i) => `hsl(${i * (360/count)},60%,60%)`);
 
-      // Draw wheel
-      function drawWheel() {
-        const radius = canvas.width / 2;
-        for (let i = 0; i < segmentCount; i++) {
-          const start = i * segmentAngle;
-          const end = start + segmentAngle;
-          ctx.beginPath();
-          ctx.moveTo(radius, radius);
-          ctx.arc(radius, radius, radius, start, end);
-          ctx.closePath();
-          ctx.fillStyle = colors[i];
-          ctx.fill();
-
-          // Draw text
-          ctx.save();
-          ctx.translate(radius, radius);
-          ctx.rotate(start + segmentAngle / 2);
-          ctx.textAlign = 'right';
-          ctx.fillStyle = '#fff';
-          ctx.font = 'bold 14px Poppins';
-          ctx.fillText(options[i], radius - 10, 0);
+      function draw() {
+        const r = canvas.width / 2;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        options.forEach((opt, i) => {
+          const start = i * angle;
+          const end = start + angle;
+          ctx.beginPath(); ctx.moveTo(r, r);
+          ctx.arc(r, r, r, start, end);
+          ctx.closePath(); ctx.fillStyle = colors[i]; ctx.fill();
+          ctx.save(); ctx.translate(r, r);
+          ctx.rotate(start + angle / 2);
+          ctx.textAlign = 'right'; ctx.fillStyle = '#FFF';
+          ctx.font = '600 14px Poppins'; ctx.fillText(opt, r - 10, 0);
           ctx.restore();
-        }
-      }
-      drawWheel();
-
-      const wheelContainer = document.getElementById('wheel-container');
-      const btn = document.getElementById('spinBtn');
-      let rotation = 0;
-
-      btn.addEventListener('click', () => {
-        btn.disabled = true;
-        const spins = 5;
-        const randomIndex = Math.floor(Math.random() * segmentCount);
-        const extraOffset = segmentAngle / 2; // center pointer
-        const targetAngle = (spins * 360) + (360 - ((randomIndex * (360/segmentCount)) + (360/segmentCount)/2));
-        rotation += targetAngle;
-        wheelContainer.style.transform = `rotate(${rotation}deg)`;
-
-        wheelContainer.addEventListener('transitionend', function handler() {
-          wheelContainer.removeEventListener('transitionend', handler);
-          const normalized = rotation % 360;
-          const idx = Math.floor(((360 - normalized) % 360) / (360/segmentCount));
-          Swal.fire({
-            title: '🎉 You won!',
-            text: options[idx],
-            icon: 'success',
-            confirmButtonText: 'Nice'
-          }).then(() => { btn.disabled = false; });
         });
-      });
+      }
+      draw();
+      const box = document.getElementById('wheel-container');
+      const trigger = document.getElementById('triggerSpin');
+      let rot = 0;
+      function spin() {
+        trigger.disabled = true;
+        const spins = 3 + Math.random() * 4;
+        const randIdx = Math.floor(Math.random() * count);
+        const target = (spins * 360) + (360 - ((randIdx * (360/count)) + ((360/count)/2)));
+        rot += target;
+        box.style.transition = 'transform 5s cubic-bezier(0.33,1,0.68,1)';
+        box.style.transform = `rotate(${rot}deg)`;
+        box.addEventListener('transitionend', function h() {
+          box.removeEventListener('transitionend', h);
+          const norm = rot % 360;
+          const idx = Math.floor(((360 - norm) % 360) / (360/count));
+          Swal.fire({ title: '🎉 Congrats!', text: `You won ${options[idx]}`, icon: 'success' })
+            .then(() => { trigger.disabled = false; });
+        });
+      }
+      trigger.addEventListener('click', spin);
     });
   </script>
 </body>
