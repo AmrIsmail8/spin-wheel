@@ -8,129 +8,123 @@
   <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #2C5F2D;
-      --secondary: #A4C639;
-      --light: #FFFFFF;
-      --dark: #333333;
-      --glass-bg: rgba(255,255,255,0.15);
+      /* Tal2ema brand palette */
+      --primary: #E01111;     /* Signature Red */
+      --secondary: #F2C94C;   /* Bright Yellow */
+      --accent: #F3E9D2;      /* Cream Accent */
+      --bg: #FFF9E6;          /* Light Cream Background */
+      --text-dark: #333333;
+      --text-light: #FFFFFF;
     }
-    *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, var(--secondary), var(--primary));
-      color: var(--light);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      overflow-x: hidden;
+      font-family:'Poppins',sans-serif;
+      background:var(--bg);
+      color:var(--text-dark);
+      display:flex; flex-direction:column;
+      align-items:center;
+      min-height:100vh;
     }
     header {
-      width: 100%; padding: 1rem 2rem;
-      display: flex; justify-content: space-between; align-items: center;
-      background: rgba(255,255,255,0.8);
-      backdrop-filter: blur(8px);
-      position: fixed; top: 0; z-index: 100;
+      width:100%; padding:1rem;
+      display:flex; justify-content:space-between;
+      align-items:center;
+      background:var(--accent);
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+      position:fixed; top:0; z-index:100;
     }
     .logo-text {
-      font-family: 'Lora', serif;
-      font-size: 1.5rem;
-      color: var(--primary);
+      font-family:'Lora',serif;
+      font-size:1.5rem;
+      color:var(--primary);
     }
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-    }
+    nav { display:flex; }
     nav a {
-      margin: 0 1rem;
-      color: var(--dark);
-      font-weight: 500;
-      position: relative;
+      margin-left:1rem;
+      color:var(--text-dark);
+      font-weight:500;
+      text-decoration:none;
+      position:relative;
     }
     nav a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px; left: 0;
-      width: 0; height: 2px;
-      background: var(--primary);
-      transition: width .3s;
+      content:'';
+      position:absolute;
+      bottom:-3px; left:0;
+      width:0; height:2px;
+      background:var(--primary);
+      transition:width .3s;
     }
-    nav a:hover::after { width: 100%; }
+    nav a:hover::after { width:100%; }
+
     .hero {
-      margin-top: 80px;
-      padding: 4rem 1rem 6rem; /* extra bottom padding */
-      text-align: center;
+      margin-top:60px;
+      padding:3rem 1rem 5rem;
+      text-align:center;
+      background:var(--secondary);
+      width:100%;
+      color:var(--text-dark);
     }
     .hero h1 {
-      font-family: 'Lora', serif;
-      font-size: 3rem;
-      color: var(--light);
-      text-shadow: 0 2px 4px rgba(0,0,0,0.4);
-      margin-bottom: 1rem;
+      font-family:'Lora',serif;
+      font-size:2.5rem;
+      margin-bottom:0.5rem;
     }
     .hero p {
-      font-size: 1.2rem;
-      color: var(--light);
-      margin-bottom: 2rem;
+      font-size:1rem;
+      margin-bottom:2rem;
     }
     .hero button {
-      position: relative;
-      z-index: 20;
-      padding: .75rem 2rem;
-      font-size: 1.25rem;
-      background: var(--light);
-      color: var(--primary);
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      transition: transform .2s;
-      margin-bottom: 3rem;
+      padding:0.75rem 2rem;
+      font-size:1rem;
+      background:var(--primary);
+      color:var(--text-light);
+      border:none; border-radius:30px;
+      cursor:pointer;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+      transition:transform .2s;
+      margin-bottom:2rem;
+      position:relative; z-index:10;
     }
-    .hero button:active { transform: scale(.96); }
+    .hero button:active { transform:scale(.96); }
+
     .container {
-      margin: -60px auto 2rem; /* less overlap to reveal hero button */
-      width: 90%; max-width: 360px;
-      background: var(--glass-bg);
-      border-radius: 20px;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-      padding: 2rem 1rem;
-      text-align: center;
-      position: relative;
-      z-index: 10;
-    }
-    #wheel-container {
-      width: 100%; padding-bottom: 100%;
-      position: relative;
-      border-radius: 50%; overflow: hidden;
-      border: 6px solid var(--light);
-      margin-bottom: 1.5rem;
-      z-index: 1;
-    }
-    #wheelCanvas {
-      position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%;
+      margin:-40px auto 2rem;
+      width:90%; max-width:360px;
+      background:transparent;
+      padding:0;
+      position:relative; z-index:5;
     }
     #pointer {
-      width: 0; height: 0;
-      border-left: 24px solid transparent;
-      border-right: 24px solid transparent;
-      border-bottom: 36px solid var(--light);
-      position: absolute;
-      top: -36px; left: calc(50% - 24px);
-      z-index: 20;
+      width:0; height:0;
+      border-left:24px solid transparent;
+      border-right:24px solid transparent;
+      border-bottom:36px solid var(--primary);
+      position:absolute;
+      top:-36px; left:calc(50% - 24px);
+      z-index:20;
     }
-    footer { height: 2rem; }
+    #wheel-container {
+      width:100%; padding-bottom:100%;
+      position:relative;
+      border-radius:50%;
+      overflow:hidden;
+      border:4px solid var(--primary);
+      background:transparent;
+    }
+    #wheelCanvas {
+      position:absolute; top:0; left:0;
+      width:100%; height:100%;
+    }
+    footer { height:2rem; }
+
     @media(max-width:480px) {
-      header { padding: .75rem 1rem; }
+      header { padding:0.5rem; }
       .logo-text { font-size:1.25rem; }
-      nav a { margin:0 .5rem; font-size:.9rem; }
-      .hero { padding:3rem 1rem 5rem; }
+      nav a { margin-left:0.5rem; font-size:0.9rem; }
       .hero h1 { font-size:2rem; }
-      .hero p { font-size:1rem; }
-      .hero button { font-size:1rem; padding:.5rem 1.5rem; margin-bottom:2rem; }
-      .container { margin:-40px auto 1rem; padding:1.5rem; }
+      .hero p { font-size:0.9rem; }
+      .hero button { font-size:0.9rem; padding:0.5rem 1.5rem; }
+      .container { margin:-30px auto 1rem; }
     }
   </style>
 </head>
@@ -141,28 +135,39 @@
       <a href="https://tal2ema.com/">Home</a>
       <a href="https://tal2ema.com/collections/all">Products</a>
       <a href="https://tal2ema.com/pages/about-tal2ema">About Us</a>
-      <a href="https://tal2ema.com/pages/contact">Contact</a>
     </nav>
   </header>
+
   <section class="hero">
     <h1>Spin & Win!</h1>
     <p>Get a chance to win exclusive tea delights!</p>
     <button id="triggerSpin">Try Your Luck</button>
   </section>
+
   <div class="container">
     <div id="pointer"></div>
-    <div id="wheel-container"><canvas id="wheelCanvas" width="300" height="300"></canvas></div>
+    <div id="wheel-container">
+      <canvas id="wheelCanvas" width="300" height="300"></canvas>
+    </div>
   </div>
+
   <footer></footer>
+
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const options = ['Free Tea Sample', '20% Off', 'Free Shipping', 'Tea Tote Bag', 'Buy 2 Get 1'];
+      const options = [
+        { text: 'Free Tea Sample', code: 'TAL20FREE' },
+        { text: '20% Off', code: 'TAL20OFF' },
+        { text: 'Free Shipping', code: 'TALSHIP' },
+        { text: 'Tea Tote Bag', code: 'TALTOTE' },
+        { text: 'Buy 2 Get 1', code: 'TALBUY2' }
+      ];
       const canvas = document.getElementById('wheelCanvas');
       const ctx = canvas.getContext('2d');
       const count = options.length;
       const angle = (2 * Math.PI) / count;
-      const colors = options.map((_, i) => `hsl(${i * (360/count)},60%,60%)`);
+      const colors = ['#E01111','#C1121F','#F2C94C','#F3E9D2','#81B29A'];
 
       function draw() {
         const r = canvas.width / 2;
@@ -176,7 +181,7 @@
           ctx.save(); ctx.translate(r, r);
           ctx.rotate(start + angle / 2);
           ctx.textAlign = 'right'; ctx.fillStyle = '#FFF';
-          ctx.font = '600 14px Poppins'; ctx.fillText(opt, r - 10, 0);
+          ctx.font = '600 14px Poppins'; ctx.fillText(opt.text, r - 10, 0);
           ctx.restore();
         });
       }
@@ -184,22 +189,30 @@
       const box = document.getElementById('wheel-container');
       const trigger = document.getElementById('triggerSpin');
       let rot = 0;
+
       function spin() {
         trigger.disabled = true;
         const spins = 3 + Math.random() * 4;
-        const randIdx = Math.floor(Math.random() * count);
-        const target = (spins * 360) + (360 - ((randIdx * (360/count)) + ((360/count)/2)));
+        const idx = Math.floor(Math.random() * count);
+        const target = (spins * 360) + (360 - ((idx * (360/count)) + ((360/count)/2)));
         rot += target;
         box.style.transition = 'transform 5s cubic-bezier(0.33,1,0.68,1)';
         box.style.transform = `rotate(${rot}deg)`;
-        box.addEventListener('transitionend', function h() {
-          box.removeEventListener('transitionend', h);
+        box.addEventListener('transitionend', function handler() {
+          box.removeEventListener('transitionend', handler);
           const norm = rot % 360;
-          const idx = Math.floor(((360 - norm) % 360) / (360/count));
-          Swal.fire({ title: '🎉 Congrats!', text: `You won ${options[idx]}`, icon: 'success' })
-            .then(() => { trigger.disabled = false; });
+          const winner = Math.floor(((360 - norm) % 360) / (360/count));
+          const prize = options[winner];
+          Swal.fire({
+            title: `🎉 ${prize.text}!`,
+            html: `Use code <strong>${prize.code}</strong> at checkout.`,
+            background: 'var(--accent)',
+            confirmButtonColor: 'var(--primary)',
+            icon: 'success'
+          }).then(() => { trigger.disabled = false; });
         });
       }
+
       trigger.addEventListener('click', spin);
     });
   </script>
