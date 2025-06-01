@@ -47,7 +47,7 @@
       z-index: 100;
     }
     .logo-image {
-      height: 60px; /* increased logo size */
+      height: 80px; /* Increased further */
     }
     nav {
       display: flex;
@@ -75,7 +75,7 @@
 
     /* Hero Section */
     .hero {
-      margin-top: 80px; /* account for larger header height */
+      margin-top: 90px; /* account for larger logo */
       padding: 3rem 1rem 5rem;
       text-align: center;
       background: var(--secondary);
@@ -124,7 +124,7 @@
       height: 0;
       border-left: 24px solid transparent;
       border-right: 24px solid transparent;
-      border-top: 36px solid var(--primary); /* arrow pointing downwards */
+      border-top: 36px solid var(--primary); /* arrow now clearly points at wheel */
       position: absolute;
       top: -36px;
       left: calc(50% - 24px);
@@ -158,7 +158,7 @@
         padding: 0.5rem 1rem;
       }
       .logo-image {
-        height: 48px; /* scaled-down for mobile */
+        height: 64px; /* scaled-down for mobile */
       }
       nav a {
         margin-left: 0.5rem;
@@ -191,7 +191,7 @@
   </header>
 
   <section class="hero">
-    <h1>Spin & Win!</n1>
+    <h1>Spin & Win!</h1>
     <p>Get a chance to win exclusive Tal2ema goodies!</p>
     <button id="triggerSpin">Try Your Luck</button>
   </section>
@@ -231,4 +231,64 @@
           ctx.moveTo(r, r);
           ctx.arc(r, r, r, startAng, endAng);
           ctx.closePath();
-          ctx.fillStyle = colors[i % colors.length];\``
+          ctx.fillStyle = colors[i % colors.length];
+          ctx.fill();
+
+          ctx.save();
+          ctx.translate(r, r);
+          ctx.rotate(startAng + angle / 2);
+          ctx.textAlign = 'right';
+          ctx.fillStyle = '#FFF';
+          ctx.font = '600 14px Poppins';
+          ctx.fillText(opt.text, r - 10, 0);
+          ctx.restore();
+        });
+      }
+      drawWheel();
+
+      const box = document.getElementById('wheel-container');
+      const trigger = document.getElementById('triggerSpin');
+      let rotation = 0;
+
+      function spin() {
+        trigger.disabled = true;
+        const spins = 3 + Math.random() * 4;
+        const chosenIndex = Math.floor(Math.random() * count);
+
+        // Compute raw angle so chosenIndex midpoint aligns at top (270°)
+        const rawMid = (chosenIndex * (360 / count)) + ((360 / count) / 2);
+        const adjust = 270 - rawMid;
+        const target = spins * 360 + adjust;
+        rotation += target;
+
+        box.style.transition = 'transform 5s cubic-bezier(0.33,1,0.68,1)';
+        box.style.transform = `rotate(${rotation}deg)`;
+
+        box.addEventListener('transitionend', function finish() {
+          box.removeEventListener('transitionend', finish);
+          const prize = options[chosenIndex];
+          if (prize.code) {
+            Swal.fire({
+              title: `🎉 ${prize.text}!`,
+              html: `Use code <strong>${prize.code}</strong> at checkout.`,
+              background: 'var(--accent)',
+              confirmButtonColor: 'var(--primary)',
+              icon: 'success'
+            }).then(() => { trigger.disabled = false; });
+          } else {
+            Swal.fire({
+              title: '😢 Try Again!',
+              text: 'Better luck next time—give it another spin!',
+              background: 'var(--accent)',
+              confirmButtonColor: 'var(--primary)',
+              icon: 'info'
+            }).then(() => { trigger.disabled = false; });
+          }
+        });
+      }
+
+      trigger.addEventListener('click', spin);
+    });
+  </script>
+</body>
+</html>
