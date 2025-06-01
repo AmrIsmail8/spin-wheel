@@ -47,7 +47,7 @@
       z-index: 100;
     }
     .logo-image {
-      height: 80px; /* Increased further */
+      height: 80px; /* Increased logo size */
     }
     nav {
       display: flex;
@@ -124,7 +124,7 @@
       height: 0;
       border-left: 24px solid transparent;
       border-right: 24px solid transparent;
-      border-top: 36px solid var(--primary); /* arrow now clearly points at wheel */
+      border-top: 36px solid var(--primary); /* arrow pointing downwards */
       position: absolute;
       top: -36px;
       left: calc(50% - 24px);
@@ -266,7 +266,31 @@
 
         box.addEventListener('transitionend', function finish() {
           box.removeEventListener('transitionend', finish);
-          const prize = options[chosenIndex];
+          // Pixel-based detection
+          const r = canvas.width / 2;
+          // Coordinates of top-center pixel relative to canvas element
+          const x0 = r;
+          const y0 = 0;
+          // Convert to center-origin
+          const xc = r;
+          const yc = r;
+          const xRel = x0 - xc;
+          const yRel = y0 - yc;
+          // Convert rotation to radians
+          const rotRad = (rotation % 360) * Math.PI / 180;
+          // Inverse rotate point by rotRad
+          const cosA = Math.cos(-rotRad);
+          const sinA = Math.sin(-rotRad);
+          const xPrime = xRel * cosA - yRel * sinA + xc;
+          const yPrime = xRel * sinA + yRel * cosA + yc;
+          // Angle of (xPrime,yPrime) from center
+          const dx = xPrime - xc;
+          const dy = yPrime - yc;
+          let polar = Math.atan2(dy, dx);
+          if (polar < 0) polar += 2 * Math.PI;
+          const deg = polar * 180 / Math.PI;
+          const idx = Math.floor(deg / (360 / count));
+          const prize = options[idx];
           if (prize.code) {
             Swal.fire({
               title: `🎉 ${prize.text}!`,
